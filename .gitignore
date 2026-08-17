@@ -1,0 +1,10 @@
+target/
+*.class
+*.jar
+.env
+application-local.yml
+.idea/
+.vscode/
+*.log
+uploads/
+storage/

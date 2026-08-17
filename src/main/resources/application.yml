@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: fin-capital-backend
+
+  datasource:
+    url: "jdbc:sqlserver://${DB_SERVER:KAVI};instanceName=${DB_INSTANCE:TEW_SQLEXPRESS};databaseName=${DB_NAME:FinCapitalDB};encrypt=true;trustServerCertificate=true"
+    username: "${DB_USERNAME:sa}"
+    password: "${DB_PASSWORD:Admin@123}"
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+    open-in-view: false
+
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: info
