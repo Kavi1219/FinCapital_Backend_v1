@@ -56,7 +56,7 @@ public class ExpenseService {
     }
 
     public void delete(Long id) {
-        if (!expenses.existsById(id)) throw new NotFoundException("Expense not found");
+        if (!expenses.existsById(id)) throw new NotFoundException("Expense not found IN DATABASE");
         expenses.deleteById(id);
     }
 
