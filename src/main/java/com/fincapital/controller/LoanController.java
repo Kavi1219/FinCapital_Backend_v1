@@ -23,6 +23,25 @@ public class LoanController {
         return s.create(r);
     }
 
+    @PostMapping("/{id}/preclose")
+    public LoanResponse preclose(@PathVariable Long id,
+                                 @RequestParam(required = false) Long collectedByAgentId,
+                                 @RequestParam(required = false) Long collectedByUserId) {
+        return s.preclose(id, collectedByAgentId, collectedByUserId);
+    }
+    @PostMapping("/{id}/return-principal")
+    public LoanResponse returnPrincipal(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long collectedByAgentId,
+            @RequestParam(required = false) Long collectedByUserId) {
+
+        return s.returnPrincipal(
+                id,
+                collectedByAgentId,
+                collectedByUserId
+        );
+    }
+
     @GetMapping
     public List<LoanResponse> all(@RequestParam Long companyId, @RequestParam Long branchId) {
         return s.all(companyId, branchId);

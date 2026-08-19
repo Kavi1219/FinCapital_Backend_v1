@@ -17,6 +17,11 @@ public class Document {
     @JoinColumn(name = "customer_id")
     private Customer customer;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "jamin_id")
+    private Jamin jamin;
+    @Column(name = "owner_type", nullable = false, length = 20)
+    private String ownerType = "CUSTOMER";
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agent_id")
     private Agent agent;
     @Column(name = "document_type", nullable = false, length = 50)
@@ -29,6 +34,27 @@ public class Document {
     private String mimeType;
     @Column(name = "uploaded_at", nullable = false)
     private LocalDateTime uploadedAt;
+
+    public Long getId() { return id; }
+    public Company getCompany() { return company; }
+    public void setCompany(Company v) { company = v; }
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer v) { customer = v; }
+    public Jamin getJamin() { return jamin; }
+    public void setJamin(Jamin v) { jamin = v; }
+    public Agent getAgent() { return agent; }
+    public void setAgent(Agent v) { agent = v; }
+    public String getOwnerType() { return ownerType; }
+    public void setOwnerType(String v) { ownerType = v; }
+    public String getDocumentType() { return documentType; }
+    public void setDocumentType(String v) { documentType = v; }
+    public String getDocumentName() { return documentName; }
+    public void setDocumentName(String v) { documentName = v; }
+    public String getFileUrl() { return fileUrl; }
+    public void setFileUrl(String v) { fileUrl = v; }
+    public String getMimeType() { return mimeType; }
+    public void setMimeType(String v) { mimeType = v; }
+    public LocalDateTime getUploadedAt() { return uploadedAt; }
 
     @PrePersist
     void prePersist() {

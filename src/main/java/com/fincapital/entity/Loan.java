@@ -34,6 +34,28 @@ public class Loan extends BaseEntity {
     private BigDecimal interestAmount;
     @Column(name = "amount_given", nullable = false, precision = 18, scale = 2)
     private BigDecimal amountGiven;
+    @Column(name = "interest_taken_upfront", nullable = false)
+    private Boolean interestTakenUpfront = false;
+    @Column(name = "total_repayment", nullable = false, precision = 18, scale = 2)
+    private BigDecimal totalRepayment;
+    @Column(name = "duration_unit", nullable = false, length = 20)
+    private String durationUnit;
+    @Column(name = "collected_amount", nullable = false, precision = 18, scale = 2)
+    private BigDecimal collectedAmount = BigDecimal.ZERO;
+    @Column(name = "principal_pending", nullable = false, precision = 18, scale = 2)
+    private BigDecimal principalPending = BigDecimal.ZERO;
+    @Column(name = "pending_due", nullable = false, precision = 18, scale = 2)
+    private BigDecimal pendingDue = BigDecimal.ZERO;
+    @Column(name = "fine_due", nullable = false, precision = 18, scale = 2)
+    private BigDecimal fineDue = BigDecimal.ZERO;
+    @Column(name = "fine_paid_total", nullable = false, precision = 18, scale = 2)
+    private BigDecimal finePaidTotal = BigDecimal.ZERO;
+    @Column(name = "preclose_amount", precision = 18, scale = 2)
+    private BigDecimal precloseAmount;
+    @Column(name = "preclosed_at")
+    private java.time.LocalDateTime preclosedAt;
+    @Column(name = "closed_at")
+    private java.time.LocalDateTime closedAt;
     @Column(name = "duration", nullable = false)
     private Integer duration;
     @Column(name = "collection_amount", nullable = false, precision = 18, scale = 2)
@@ -138,6 +160,30 @@ public class Loan extends BaseEntity {
     public void setAmountGiven(BigDecimal v) {
         amountGiven = v;
     }
+
+
+    public Boolean getInterestTakenUpfront() { return interestTakenUpfront; }
+    public void setInterestTakenUpfront(Boolean v) { interestTakenUpfront = v; }
+    public BigDecimal getTotalRepayment() { return totalRepayment; }
+    public void setTotalRepayment(BigDecimal v) { totalRepayment = v; }
+    public String getDurationUnit() { return durationUnit; }
+    public void setDurationUnit(String v) { durationUnit = v; }
+    public BigDecimal getCollectedAmount() { return collectedAmount; }
+    public void setCollectedAmount(BigDecimal v) { collectedAmount = v; }
+    public BigDecimal getPrincipalPending() { return principalPending; }
+    public void setPrincipalPending(BigDecimal v) { principalPending = v; }
+    public BigDecimal getPendingDue() { return pendingDue; }
+    public void setPendingDue(BigDecimal v) { pendingDue = v; }
+    public BigDecimal getFineDue() { return fineDue; }
+    public void setFineDue(BigDecimal v) { fineDue = v; }
+    public BigDecimal getFinePaidTotal() { return finePaidTotal; }
+    public void setFinePaidTotal(BigDecimal v) { finePaidTotal = v; }
+    public BigDecimal getPrecloseAmount() { return precloseAmount; }
+    public void setPrecloseAmount(BigDecimal v) { precloseAmount = v; }
+    public java.time.LocalDateTime getPreclosedAt() { return preclosedAt; }
+    public void setPreclosedAt(java.time.LocalDateTime v) { preclosedAt = v; }
+    public java.time.LocalDateTime getClosedAt() { return closedAt; }
+    public void setClosedAt(java.time.LocalDateTime v) { closedAt = v; }
 
     public Integer getDuration() {
         return duration;

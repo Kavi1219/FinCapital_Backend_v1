@@ -41,6 +41,7 @@ public class CustomerService {
         x.setCustomerCode(codes.customerCode(c.getCompanyCode(), customers.countByCompany_Id(c.getId()) + 1));
         x.setCustomerName(r.name());
         x.setMobile(r.mobile());
+        x.setFatherName(r.fatherName());
         x.setWork(r.work());
         x.setAddress(r.address());
         x.setProfilePhotoUrl(r.profilePhotoUrl());
@@ -55,6 +56,7 @@ public class CustomerService {
         j.setCustomer(x);
         j.setJaminName(q.name());
         j.setMobile(q.mobile());
+        j.setFatherName(q.fatherName());
         j.setWork(q.work());
         j.setAddress(q.address());
         j.setRelationship(q.relationship());
@@ -77,6 +79,6 @@ public class CustomerService {
     }
 
     private CustomerResponse map(Customer x, Jamin j) {
-        return new CustomerResponse(x.getId(), x.getCompany().getId(), x.getBranch().getId(), x.getCustomerCode(), x.getCustomerName(), x.getMobile(), x.getWork(), x.getAddress(), x.getProfilePhotoUrl(), x.getDocumentPhotoUrl(), x.getStatus(), j == null ? null : j.getJaminName(), j == null ? null : j.getMobile());
+        return new CustomerResponse(x.getId(), x.getCompany().getId(), x.getBranch().getId(), x.getCustomerCode(), x.getCustomerName(), x.getMobile(), x.getFatherName(), x.getWork(), x.getAddress(), x.getProfilePhotoUrl(), x.getDocumentPhotoUrl(), x.getStatus(), x.getCreatedAt(), j == null ? null : j.getJaminName(), j == null ? null : j.getMobile(), j == null ? null : j.getFatherName(), j == null ? null : j.getWork(), j == null ? null : j.getAddress(), j == null ? null : j.getProfilePhotoUrl(), j == null ? null : j.getDocumentPhotoUrl());
     }
 }
