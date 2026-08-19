@@ -15,6 +15,8 @@ public class Jamin extends BaseEntity {
     private String jaminName;
     @Column(name = "mobile", nullable = false, length = 20)
     private String mobile;
+    @Column(name = "father_name", length = 150)
+    private String fatherName;
     @Column(name = "work", length = 150)
     private String work;
     @Column(name = "address", nullable = false, length = 500)
@@ -53,6 +55,9 @@ public class Jamin extends BaseEntity {
     public void setMobile(String v) {
         mobile = v;
     }
+
+    public String getFatherName() { return fatherName; }
+    public void setFatherName(String v) { fatherName = v; }
 
     public String getWork() {
         return work;
