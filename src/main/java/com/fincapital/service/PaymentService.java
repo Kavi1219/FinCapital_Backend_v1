@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -446,7 +445,8 @@ public class PaymentService {
                     "Collection from " +
                             customer.getCustomerName(),
                     agent,
-                    user
+                    user,
+                    actualPaymentDate.atStartOfDay()
             );
         }
 
@@ -472,7 +472,8 @@ public class PaymentService {
                     "Fine received from " +
                             customer.getCustomerName(),
                     agent,
-                    user
+                    user,
+                    actualPaymentDate.atStartOfDay()
             );
         }
 
@@ -679,8 +680,9 @@ public class PaymentService {
                     "CLOSED"
             );
 
+            // Use the actual payment date as the loan closing date.
             loan.setClosedAt(
-                    LocalDateTime.now()
+                    actualPaymentDate.atStartOfDay()
             );
 
             loan.setPrincipalPending(
@@ -691,7 +693,6 @@ public class PaymentService {
                     BigDecimal.ZERO
             );
         }
-
         // =====================================================
         // IO DOES NOT AUTO CLOSE
         //

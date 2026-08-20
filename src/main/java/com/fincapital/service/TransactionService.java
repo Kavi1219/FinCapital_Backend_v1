@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 public class TransactionService {
 
     private final MoneyTransactionRepository repo;
-
     private final CodeService codes;
 
     public TransactionService(
@@ -24,7 +24,42 @@ public class TransactionService {
     }
 
     // =========================================================
-    // CREATE MONEY TRANSACTION
+    // CREATE TRANSACTION - DEFAULT DATE
+    // =========================================================
+
+    @Transactional
+    public MoneyTransaction create(
+            Company company,
+            Branch branch,
+            String type,
+            Long ref,
+            Customer customer,
+            Loan loan,
+            BigDecimal amount,
+            String direction,
+            String description,
+            Agent agent,
+            AppUser user
+    ) {
+
+        return create(
+                company,
+                branch,
+                type,
+                ref,
+                customer,
+                loan,
+                amount,
+                direction,
+                description,
+                agent,
+                user,
+                null
+        );
+    }
+
+    // =========================================================
+    // CREATE TRANSACTION - BUSINESS DATE
     // =========================================================
 
     @Transactional
@@ -39,12 +74,9 @@ public class TransactionService {
             String direction,
             String description,
             Agent agent,
-            AppUser user
+            AppUser user,
+            LocalDateTime transactionDate
     ) {
-
-        // =====================================================
-        // FIND LAST VISIBLE TRANSACTION CODE
-        // =====================================================
 
         long lastNumber =
                 repo
@@ -54,8 +86,7 @@ public class TransactionService {
                         .map(
                                 transaction ->
                                         codes.transactionNumber(
-                                                transaction
-                                                        .getTransactionCode()
+                                                transaction.getTransactionCode()
                                         )
                         )
                         .orElse(0L);
@@ -69,63 +100,28 @@ public class TransactionService {
                         nextNumber
                 );
 
-        // =====================================================
-        // CREATE TRANSACTION
-        // =====================================================
-
         MoneyTransaction t =
                 new MoneyTransaction();
 
-        t.setCompany(
-                company
-        );
+        t.setCompany(company);
+        t.setBranch(branch);
+        t.setTransactionCode(transactionCode);
+        t.setTransactionType(type);
+        t.setReferenceId(ref);
+        t.setCustomer(customer);
+        t.setLoan(loan);
+        t.setAmount(amount);
+        t.setDirection(direction);
+        t.setDescription(description);
+        t.setCreatedByAgent(agent);
+        t.setCreatedByUser(user);
 
-        t.setBranch(
-                branch
-        );
+        if (transactionDate != null) {
+            t.setTransactionDate(
+                    transactionDate
+            );
+        }
 
-        t.setTransactionCode(
-                transactionCode
-        );
-
-        t.setTransactionType(
-                type
-        );
-
-        t.setReferenceId(
-                ref
-        );
-
-        t.setCustomer(
-                customer
-        );
-
-        t.setLoan(
-                loan
-        );
-
-        t.setAmount(
-                amount
-        );
-
-        t.setDirection(
-                direction
-        );
-
-        t.setDescription(
-                description
-        );
-
-        t.setCreatedByAgent(
-                agent
-        );
-
-        t.setCreatedByUser(
-                user
-        );
-
-        return repo.save(
-                t
-        );
+        return repo.save(t);
     }
 }

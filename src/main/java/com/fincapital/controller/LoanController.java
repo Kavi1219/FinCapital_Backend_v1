@@ -24,21 +24,32 @@ public class LoanController {
     }
 
     @PostMapping("/{id}/preclose")
-    public LoanResponse preclose(@PathVariable Long id,
-                                 @RequestParam(required = false) Long collectedByAgentId,
-                                 @RequestParam(required = false) Long collectedByUserId) {
-        return s.preclose(id, collectedByAgentId, collectedByUserId);
+    public LoanResponse preclose(
+            @PathVariable Long id,
+            @RequestParam(required = false) Long collectedByAgentId,
+            @RequestParam(required = false) Long collectedByUserId,
+            @RequestParam(required = false) java.time.LocalDate date
+    ) {
+        return s.preclose(
+                id,
+                collectedByAgentId,
+                collectedByUserId,
+                date
+        );
     }
+
     @PostMapping("/{id}/return-principal")
     public LoanResponse returnPrincipal(
             @PathVariable Long id,
             @RequestParam(required = false) Long collectedByAgentId,
-            @RequestParam(required = false) Long collectedByUserId) {
-
+            @RequestParam(required = false) Long collectedByUserId,
+            @RequestParam(required = false) java.time.LocalDate date
+    ) {
         return s.returnPrincipal(
                 id,
                 collectedByAgentId,
-                collectedByUserId
+                collectedByUserId,
+                date
         );
     }
 

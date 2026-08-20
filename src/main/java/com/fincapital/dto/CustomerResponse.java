@@ -6,4 +6,5 @@ public record CustomerResponse(Long id, Long companyId, Long branchId, String cu
                                String mobile, String fatherName, String work, String address, String profilePhotoUrl,
                                String documentPhotoUrl, String status, LocalDateTime createdAt, String jaminName,
                                String jaminMobile, String jaminFatherName, String jaminWork, String jaminAddress,
-                               String jaminProfilePhotoUrl, String jaminDocumentPhotoUrl) {}
+                               String jaminProfilePhotoUrl, String jaminDocumentPhotoUrl) {
+}

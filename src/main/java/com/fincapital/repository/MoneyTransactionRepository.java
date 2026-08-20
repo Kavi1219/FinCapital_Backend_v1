@@ -27,14 +27,16 @@ public interface MoneyTransactionRepository
     );
 
     // =========================================================
-    // GET HIGHEST VISIBLE TRANSACTION CODE FOR COMPANY
-    //
-    // Because transaction code uses fixed 8-digit numbering,
-    // text sorting works correctly:
-    //
-    // SFCTXN-00000008
-    // SFCTXN-00000009
-    // SFCTXN-00000010
+    // CUSTOMER PAYMENT HISTORY
+    // =========================================================
+
+    List<MoneyTransaction>
+    findByCustomer_IdOrderByTransactionDateDesc(
+            Long customerId
+    );
+
+    // =========================================================
+    // NEXT TRANSACTION CODE
     // =========================================================
 
     Optional<MoneyTransaction>

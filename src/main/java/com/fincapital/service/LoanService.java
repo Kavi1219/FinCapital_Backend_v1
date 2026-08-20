@@ -239,9 +239,7 @@ public class LoanService {
              *
              * Principal Pending ₹10,000
              *
-             *
-             * Interest payments DO NOT reduce principal.
-             * Principal remains ₹10,000 until returned/preclosed.
+             * Interest payments do NOT reduce principal.
              */
 
             totalRepayment =
@@ -472,14 +470,6 @@ public class LoanService {
                     )
             );
 
-            /*
-             * EMI:
-             * dueAmount = EMI collection
-             *
-             * IO:
-             * dueAmount = interest only
-             */
-
             schedule.setDueAmount(
                     collectionAmount
             );
@@ -525,7 +515,8 @@ public class LoanService {
     public LoanResponse preclose(
             Long id,
             Long collectedByAgentId,
-            Long collectedByUserId
+            Long collectedByUserId,
+            LocalDate date
     ) {
 
         Loan loan = loans
@@ -545,6 +536,15 @@ public class LoanService {
                     "Only active loans can be preclosed"
             );
         }
+
+        // =====================================================
+        // BUSINESS DATE
+        // =====================================================
+
+        LocalDate actualDate =
+                date == null
+                        ? LocalDate.now()
+                        : date;
 
         BigDecimal amount;
 
@@ -576,7 +576,9 @@ public class LoanService {
                     loan.getPrincipalPending() == null
                             ? loan.getTotalRepayment()
                             .subtract(
-                                    loan.getCollectedAmount()
+                                    safe(
+                                            loan.getCollectedAmount()
+                                    )
                             )
                             .max(
                                     BigDecimal.ZERO
@@ -614,8 +616,9 @@ public class LoanService {
                 amount
         );
 
+        // Actual preclose business date
         loan.setPreclosedAt(
-                java.time.LocalDateTime.now()
+                actualDate.atStartOfDay()
         );
 
         loan.setStatus(
@@ -655,7 +658,8 @@ public class LoanService {
                         loan.getCustomer()
                                 .getCustomerName(),
                 agent,
-                user
+                user,
+                actualDate.atStartOfDay()
         );
 
         return map(
@@ -663,11 +667,16 @@ public class LoanService {
         );
     }
 
+    // =========================================================
+    // RETURN PRINCIPAL - IO LOAN
+    // =========================================================
+
     @Transactional
     public LoanResponse returnPrincipal(
             Long id,
             Long collectedByAgentId,
-            Long collectedByUserId
+            Long collectedByUserId,
+            LocalDate date
     ) {
 
         Loan loan = loans
@@ -697,6 +706,15 @@ public class LoanService {
                     "Principal return is only allowed for IO loans"
             );
         }
+
+        // =====================================================
+        // BUSINESS DATE
+        // =====================================================
+
+        LocalDate actualDate =
+                date == null
+                        ? LocalDate.now()
+                        : date;
 
         BigDecimal principalAmount =
                 loan.getPrincipalPending() == null
@@ -739,9 +757,9 @@ public class LoanService {
                                 )
                         );
 
-        // ==============================================
+        // =====================================================
         // RETURN PRINCIPAL
-        // ==============================================
+        // =====================================================
 
         loan.setPrincipalPending(
                 BigDecimal.ZERO
@@ -755,17 +773,18 @@ public class LoanService {
                 "CLOSED"
         );
 
+        // Actual principal-return business date
         loan.setClosedAt(
-                java.time.LocalDateTime.now()
+                actualDate.atStartOfDay()
         );
 
         loans.save(
                 loan
         );
 
-        // ==============================================
+        // =====================================================
         // CREATE PRINCIPAL RETURN TRANSACTION
-        // ==============================================
+        // =====================================================
 
         tx.create(
                 loan.getCompany(),
@@ -780,7 +799,8 @@ public class LoanService {
                         loan.getCustomer()
                                 .getCustomerName(),
                 agent,
-                user
+                user,
+                actualDate.atStartOfDay()
         );
 
         return map(
