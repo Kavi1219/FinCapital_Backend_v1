@@ -641,6 +641,43 @@ public class LoanService {
                 BigDecimal.ZERO
         );
 
+        // =====================================================
+        // CANCEL REMAINING UNPAID SCHEDULES
+        // =====================================================
+
+        List<LoanSchedule> loanSchedules =
+                schedules.findAll()
+                        .stream()
+                        .filter(
+                                schedule ->
+                                        schedule.getLoan() != null &&
+                                                loan.getId().equals(
+                                                        schedule.getLoan().getId()
+                                                )
+                        )
+                        .toList();
+
+        for (LoanSchedule schedule : loanSchedules) {
+
+            String scheduleStatus =
+                    schedule.getStatus();
+
+            if (
+                    "PENDING".equals(scheduleStatus) ||
+                            "PARTIAL".equals(scheduleStatus) ||
+                            "OVERDUE".equals(scheduleStatus)
+            ) {
+
+                schedule.setStatus(
+                        "CANCELLED"
+                );
+
+                schedules.save(
+                        schedule
+                );
+            }
+        }
+
         loans.save(
                 loan
         );
